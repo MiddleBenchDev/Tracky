@@ -27,7 +27,7 @@ export default function RootLayout({
       <body
         className={`${inter.variable} antialiased`}
       >
-        <Theme accentColor="purple" appearance="dark" grayColor="sage" radius="small" scaling="95%">
+        <Theme accentColor="purple" /* appearance="dark" */ grayColor="sage" radius="small" scaling="95%">
           <NavBar />
           <main className="p-5">
             {children}
