@@ -11,6 +11,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { createIssueSchema } from '@/app/validation.schema'
 import { z } from 'zod'
 import ErrorMessage from '@/app/components/errorMessage'
+import Loader from '@/app/components/loader'
 
 type IssueForm = z.infer<typeof createIssueSchema>
 
@@ -20,13 +21,16 @@ const NewIssuePage = () => {
         resolver: zodResolver(createIssueSchema)
     })
     const [error, setError] = useState({ isError: false, message: "" })
+    const [isSubmitting, setIsSubmitting] = useState(false)
 
     const onSubmit = async (data: IssueForm) => {
+        setIsSubmitting(true)
         try {
             await ApiService.post('/api/issues', data)
             router.push('/issues')
         } catch (err) {
             setError({ isError: true, message: "An unexpected error occured!" })
+            setIsSubmitting(false)
             console.log(err)
         }
     }
@@ -50,7 +54,7 @@ const NewIssuePage = () => {
                 {
                     errors?.description && <ErrorMessage message={errors?.description?.message!} />
                 }
-                <Button>Create Issue</Button>
+                <Button disabled={isSubmitting}>{`Creat${isSubmitting ? 'ing' : 'e'} Issue`} {isSubmitting ? <Loader /> : undefined}</Button>
             </form>
         </div>
     )
